@@ -32,8 +32,6 @@ namespace stack_kateassy
 			Console.WriteLine("\t\tstack clear");
 			simst.Clear();
 			Console.WriteLine($"stack size: {simst.Size()}");
-
-			SimpleStack s = new SimpleStack();
 		}
 	}
 }

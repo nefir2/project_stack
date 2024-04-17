@@ -8,7 +8,10 @@ namespace stack_kateassy.Classes
 {
 	public class SimpleStack : IStack, ICloneable
 	{
+		#region fields
 		private List<int> stack;
+		#endregion f
+		#region constructors
 		public SimpleStack() => stack = new List<int>();
 		public SimpleStack(int[] stack) : this(stack.ToList<int>()) { }
 		public SimpleStack(List<int> stack)
@@ -19,6 +22,9 @@ namespace stack_kateassy.Classes
 		}
 		public SimpleStack(Stack<int> stack) : this(stack.ToList<int>()) { }
 		public SimpleStack(SimpleStack stack) : this(stack.AsList()) { }
+		#endregion ctors
+		#region methods
+		#region realizations
 		public void Clear() => stack.Clear();
 		public bool IsEmpty() => stack.Count == 0;
 		public int Pop()
@@ -30,9 +36,13 @@ namespace stack_kateassy.Classes
 		}
 		public void Push(int value) => stack.Add(value);
 		public int Size() => stack.Count;
+		public object Clone() => new SimpleStack(stack.ToList<int>());
+		#endregion realiz
+		#region private methods
 		private void Reverse() => stack.Reverse();
 		private List<int> AsList() => stack;
-		public object Clone() => new SimpleStack(stack.ToList<int>());
+		#endregion prvats
+		#region static methods
 		internal static SimpleStack Reverse(SimpleStack s) => (CreateStack(s) as SimpleStack) ?? new SimpleStack(s);
 		public static IStack CreateStack(Stack<int> s) => new SimpleStack(s.Reverse().ToList<int>());
 		public static IStack CreateStack(IStack s)
@@ -47,6 +57,8 @@ namespace stack_kateassy.Classes
 			s.Reverse();
 			return new SimpleStack(s);
 		}
+		#endregion stcs
+		#region overrides
 		public override string ToString()
 		{
 			string ret = "";
@@ -55,5 +67,7 @@ namespace stack_kateassy.Classes
 			stack.Reverse();
 			return ret;
 		}
+		#endregion overr
+		#endregion mthds
 	}
 }
