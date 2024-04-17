@@ -1,8 +1,8 @@
-﻿using System;
+﻿using stack_kateassy.Interfaces;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
-
-using stack_kateassy.Interfaces;
 
 namespace stack_kateassy.Classes
 {
@@ -13,6 +13,7 @@ namespace stack_kateassy.Classes
 		public SimpleStack(int[] stack) : this(stack.ToList<int>()) { } // => this.stack = stack.ToList<int>();
 		public SimpleStack(List<int> stack)
 		{
+			stack ??= new List<int>();
 			this.stack = new List<int>(stack.Count);
 			for (int i = 0; i < stack.Count; i++) this.stack.Add(stack[i]);
 		}
@@ -23,13 +24,34 @@ namespace stack_kateassy.Classes
 		public int Pop()
 		{
 			if (this.IsEmpty()) return 0;
-			int value = stack.Last();
+			int value = stack[^1]; //stack.Count - 1 //.Last();
 			stack.RemoveAt(stack.Count - 1);
 			return value;
 		}
 		public void Push(int value) => stack.Add(value);
 		public int Size() => stack.Count;
 		internal void Reverse() => stack.Reverse();
+		private List<int> AsList() => stack;
+		public object Clone() => new SimpleStack(stack.ToList<int>());
+		internal static SimpleStack Reverse(SimpleStack s) => (CreateStack(s) as SimpleStack) ?? new SimpleStack(s);
+		//{
+		//	s = new SimpleStack((s.Clone() as SimpleStack)?.AsList());
+		//	s.Reverse();
+		//	return s;
+		//}
+		public static IStack CreateStack(Stack<int> s) => new SimpleStack(s.Reverse().ToList<int>());
+		public static IStack CreateStack(IStack s)
+		{
+			SimpleStack newStack = new SimpleStack();
+			int sSize = s.Size();
+			for (int i = 0; i < sSize; i++) newStack.Push(s.Pop());
+			return newStack;
+		}
+		public static IStack CreateStack(SimpleStack s)
+		{
+			s.Reverse();
+			return new SimpleStack(s);
+		}
 		public override string ToString()
 		{
 			string ret = "";
@@ -38,7 +60,5 @@ namespace stack_kateassy.Classes
 			stack.Reverse();
 			return ret;
 		}
-		private List<int> AsList() => stack;
-		public object Clone() => new SimpleStack(stack.ToList<int>());
 	}
 }
